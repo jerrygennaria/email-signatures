@@ -91,4 +91,18 @@ On Employees (`tblIi596i2VjIrTjI`):
 - Renderer changes: edit the Code node in the n8n workflow(s). Workflow JSON is backed up to `~/projects/n8n-backups/workflows/signatures/` by Jerry's existing backup automation.
 - Airtable schema changes: use the Airtable MCP tools, or edit the base directly. Update the field table above when fields change.
 
+## Local preview and verification
+
+To visually check template changes before committing:
+
+```bash
+npm install           # first run only, installs puppeteer
+node render-preview.mjs   # writes preview.html
+node serve.mjs            # serves project root at http://localhost:3000
+# open http://localhost:3000/preview.html in a browser
+node screenshot.mjs http://localhost:3000/preview.html my-label   # optional screenshot
+```
+
+`preview.html` is gitignored. Edit the sample data at the top of `render-preview.mjs` to test different scenarios (with/without credentials, with/without Calendly). The preview rewrites jsDelivr URLs to local `/assets/` paths so it works without pushing.
+
 Before claiming work is done, verify the signature renders correctly in at least Gmail web and Apple Mail. Paste it into a test Gmail signature and send to yourself.

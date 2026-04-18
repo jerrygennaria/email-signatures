@@ -1,0 +1,13 @@
+{
+  "name": "email-signatures",
+  "version": "0.1.0",
+  "private": true,
+  "description": "TOKY email signature template + n8n workflow",
+  "type": "module",
+  "scripts": {
+    "preview": "node render-preview.mjs && node serve.mjs"
+  },
+  "devDependencies": {
+    "puppeteer": "^24.41.0"
+  }
+}
