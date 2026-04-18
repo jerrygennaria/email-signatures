@@ -1,0 +1,990 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<title>TOKY Email Signature Editor</title>
+<meta name="viewport" content="width=1280" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   TOKY Email Signature Editor
+   Dark (default) + Light theme tokens
+   ============================================================ */
+
+:root,
+:root[data-theme="dark"] {
+  --surface-base: #110B14;
+  --surface-raised: #1C1420;
+  --surface-overlay: #271D2E;
+  --surface-active: #331F3D;
+  --surface-input: #1C1420;
+
+  --text-primary: #FEDBFF;
+  --text-secondary: #A6ACAC;
+  --text-muted: #5E5E5E;
+  --text-accent: #E28CFF;
+
+  --border-default: #271D2E;
+  --border-subtle: #1C1420;
+  --border-emphasis: #9E0085;
+  --border-input: #5E5E5E;
+  --border-input-focus: #E28CFF;
+
+  --primary: #9E0085;
+  --primary-hover: #B8009B;
+  --primary-text: #FEDBFF;
+
+  --success: #9FBF38;
+  --warning: #FFAE00;
+  --error: #F23E27;
+  --info: #00B7FF;
+
+  --shadow-pop: 0 8px 32px rgba(158, 0, 133, 0.15), 0 2px 8px rgba(0,0,0,0.3);
+  --code-bg: #0B0710;
+}
+
+:root[data-theme="light"] {
+  --surface-base: #FFFFFF;
+  --surface-raised: #F7F7F8;
+  --surface-overlay: #FFFFFF;
+  --surface-active: #FEDBFF;
+  --surface-input: #FFFFFF;
+
+  --text-primary: #000000;
+  --text-secondary: #5E5E5E;
+  --text-muted: #A6ACAC;
+  --text-accent: #9E0085;
+
+  --border-default: #E7E6E8;
+  --border-subtle: #F0F0F0;
+  --border-emphasis: #9E0085;
+  --border-input: #C9C7CB;
+  --border-input-focus: #9E0085;
+
+  --primary: #9E0085;
+  --primary-hover: #7A0068;
+  --primary-text: #FEDBFF;
+
+  --success: #6B802F;
+  --warning: #C17F00;
+  --error: #D93520;
+  --info: #004CEE;
+
+  --shadow-pop: 0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.06);
+  --code-bg: #FAFAFA;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0; padding: 0;
+  background: var(--surface-base);
+  color: var(--text-primary);
+  font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+button { font-family: inherit; cursor: pointer; }
+
+:root {
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+/* ---------- App chrome ---------- */
+.app { min-height: 100vh; display: flex; flex-direction: column; }
+
+.topbar {
+  display: flex; align-items: center; gap: 24px;
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--border-default);
+  background: var(--surface-base);
+  position: sticky; top: 0; z-index: 20;
+}
+.topbar .logo {
+  font-weight: 800; letter-spacing: 0.08em;
+  font-size: 18px;
+  display: flex; align-items: center; gap: 10px;
+  color: var(--text-primary);
+}
+.topbar .logo .mark {
+  display: inline-flex; align-items: center; letter-spacing: 0.12em;
+}
+.topbar .logo .mark .o {
+  display: inline-block; width: 0.7em; height: 0.7em;
+  border: 2px solid currentColor; border-radius: 50%;
+  margin: 0 0.08em; box-sizing: border-box;
+}
+.topbar .logo small {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.02em;
+  color: var(--text-secondary); text-transform: none;
+  margin-left: 4px;
+}
+.topbar nav { display: flex; gap: 2px; margin-left: 12px; }
+.topbar nav button {
+  background: transparent; border: 0;
+  color: var(--text-secondary);
+  padding: 8px 14px;
+  font-size: 13px; font-weight: 500;
+  border-radius: 6px;
+}
+.topbar nav button:hover { color: var(--text-primary); background: var(--surface-raised); }
+.topbar nav button.active {
+  color: var(--text-accent);
+  background: var(--surface-raised);
+}
+.topbar .spacer { flex: 1; }
+.topbar .pill {
+  font-size: 11px; color: var(--text-secondary);
+  border: 1px solid var(--border-default);
+  padding: 4px 10px; border-radius: 999px;
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--surface-raised);
+}
+.topbar .pill.ok { color: var(--success); border-color: color-mix(in oklch, var(--success) 35%, transparent); background: color-mix(in oklch, var(--success) 10%, transparent); }
+
+.theme-toggle {
+  display: inline-flex; border: 1px solid var(--border-default);
+  border-radius: 999px; padding: 2px; background: var(--surface-raised);
+}
+.theme-toggle button {
+  background: transparent; border: 0;
+  color: var(--text-secondary); padding: 5px 12px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  border-radius: 999px;
+}
+.theme-toggle button.on { background: var(--surface-overlay); color: var(--text-primary); box-shadow: inset 0 0 0 1px var(--border-default); }
+
+.avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--surface-overlay);
+  color: var(--text-accent);
+  font-size: 11px; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border-default);
+}
+
+/* ---------- Panel primitives ---------- */
+.panel {
+  background: var(--surface-raised);
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+}
+.panel-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-default);
+  display: flex; align-items: center; gap: 10px;
+  font-size: 11.5px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.panel-header .spacer { flex: 1; }
+.panel-header .muted { color: var(--text-muted); font-weight: 500; text-transform: none; letter-spacing: 0; font-size: 12px; }
+.panel-body { padding: 16px; }
+
+/* Tag / chip */
+.tag {
+  font-size: 10.5px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--text-secondary);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-default);
+  padding: 3px 8px; border-radius: 3px;
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.tag.accent { color: var(--text-accent); border-color: color-mix(in oklch, var(--text-accent) 30%, transparent); }
+.tag.ok     { color: var(--success);     border-color: color-mix(in oklch, var(--success) 30%, transparent);     background: color-mix(in oklch, var(--success) 10%, transparent); }
+.tag.warn   { color: var(--warning);     border-color: color-mix(in oklch, var(--warning) 30%, transparent);     background: color-mix(in oklch, var(--warning) 10%, transparent); }
+.tag.err    { color: var(--error);       border-color: color-mix(in oklch, var(--error) 30%, transparent);       background: color-mix(in oklch, var(--error) 10%, transparent); }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 500;
+  padding: 7px 12px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-secondary);
+  transition: background 0.1s, color 0.1s, border-color 0.1s;
+}
+.btn:hover { background: var(--surface-overlay); color: var(--text-primary); }
+.btn.primary { background: var(--primary); color: var(--primary-text); border-color: var(--primary); }
+.btn.primary:hover { background: var(--primary-hover); color: var(--primary-text); }
+.btn.ghost { border-color: var(--border-default); color: var(--text-primary); }
+.btn.ghost:hover { border-color: var(--border-input); background: var(--surface-overlay); }
+.btn.sm { padding: 4px 9px; font-size: 12px; }
+.btn.xs { padding: 2px 7px; font-size: 11px; }
+
+/* Input */
+.input {
+  background: var(--surface-input);
+  border: 1px solid var(--border-input);
+  color: var(--text-primary);
+  padding: 7px 10px;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: 13px;
+  width: 100%;
+}
+.input:focus { outline: none; border-color: var(--border-input-focus); box-shadow: 0 0 0 3px color-mix(in oklch, var(--border-input-focus) 25%, transparent); }
+.input::placeholder { color: var(--text-muted); }
+select.input { appearance: none; padding-right: 28px; background-image: linear-gradient(45deg, transparent 50%, var(--text-secondary) 50%), linear-gradient(-45deg, transparent 50%, var(--text-secondary) 50%); background-position: calc(100% - 14px) 52%, calc(100% - 9px) 52%; background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; }
+
+.fieldrow {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--border-default);
+}
+.fieldrow:last-child { border-bottom: 0; }
+.fieldrow label {
+  color: var(--text-secondary); font-size: 12px; font-weight: 500;
+  padding-top: 8px;
+}
+.fieldrow .sub {
+  font-size: 10.5px; color: var(--text-muted);
+  letter-spacing: 0.02em; margin-top: 2px;
+}
+
+/* Signature preview (actual rendered TOKY signature) */
+.sig-preview {
+  background: #fff; color: #666;
+  border-radius: 6px;
+  padding: 22px 24px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  line-height: 15px;
+  width: 300px;
+  max-width: 100%;
+}
+.sig-preview .sig-salutation { font-weight: 700; color: #666; text-decoration: underline; margin-bottom: 14px; }
+.sig-preview .sig-logo {
+  display: inline-flex; align-items: center;
+  font-weight: 800; letter-spacing: 0.18em; font-size: 16px;
+  color: #000; margin-bottom: 14px;
+}
+.sig-preview .sig-logo .o {
+  display: inline-block; width: 0.65em; height: 0.65em;
+  border: 2px solid #000; border-radius: 50%;
+  margin: 0 0.06em; box-sizing: border-box;
+}
+.sig-preview .sig-logo .reg { font-size: 7px; vertical-align: super; margin-left: 1px; letter-spacing: 0; }
+.sig-preview .sig-name { color: #be1900; font-weight: 700; }
+.sig-preview .sig-role { color: #666; margin-bottom: 14px; }
+.sig-preview .sig-company { color: #666; font-weight: 700; }
+.sig-preview .sig-tagline { color: #666; font-style: italic; margin-bottom: 14px; }
+.sig-preview .sig-row { color: #666; }
+.sig-preview .sig-row .k { color: #be1900; font-weight: 700; }
+.sig-preview .sig-row .sep { margin: 0 6px; }
+.sig-preview .sig-cta { color: #be1900; font-weight: 700; margin-top: 14px; margin-bottom: 14px; }
+.sig-preview .sig-socials { display: flex; gap: 4px; margin-top: 4px; }
+.sig-preview .sig-socials span {
+  width: 24px; height: 24px; background: #000; color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; border-radius: 2px;
+}
+.sig-preview .ph-pill {
+  display: inline-block;
+  background: rgba(158, 0, 133, 0.10);
+  color: #9E0085;
+  border: 1px dashed #9E0085;
+  padding: 0 4px; border-radius: 3px;
+  font-family: var(--font-mono); font-size: 10px;
+}
+
+/* Character counter */
+.char-counter {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  background: var(--surface-overlay);
+  border: 1px solid var(--border-default);
+}
+.char-counter .bar { width: 72px; height: 4px; background: var(--surface-base); border-radius: 2px; overflow: hidden; position: relative; }
+.char-counter .fill { position: absolute; inset: 0; background: var(--success); }
+.char-counter.warn { color: var(--warning); }
+.char-counter.warn .fill { background: var(--warning); }
+.char-counter.err  { color: var(--error); }
+.char-counter.err .fill { background: var(--error); }
+
+/* Code editor */
+.code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background: var(--code-bg);
+  border: 1px solid var(--border-default);
+  border-radius: 6px;
+  padding: 14px 14px 14px 48px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  white-space: pre;
+  overflow: auto;
+  counter-reset: line;
+}
+.code .ln { display: block; counter-increment: line; position: relative; }
+.code .ln::before {
+  content: counter(line);
+  position: absolute; left: -36px;
+  color: var(--text-muted); font-size: 11px;
+  text-align: right; width: 24px;
+}
+.code .t { color: var(--text-accent); }
+.code .a { color: var(--warning); }
+.code .s { color: var(--success); }
+.code .ph { color: var(--text-accent); background: color-mix(in oklch, var(--text-accent) 12%, transparent); padding: 0 2px; border-radius: 2px; }
+.code .c { color: var(--text-muted); font-style: italic; }
+
+/* Tables */
+.tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+.tbl thead th {
+  font-size: 10.5px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-secondary);
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-default);
+  background: var(--surface-raised);
+}
+.tbl tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-default);
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+.tbl tbody tr { cursor: pointer; }
+.tbl tbody tr:hover td { background: var(--surface-overlay); }
+.tbl tbody tr.selected td { background: color-mix(in oklch, var(--primary) 18%, transparent); }
+.tbl .chip {
+  display: inline-block; font-size: 10.5px;
+  padding: 2px 7px; border-radius: 3px;
+  background: var(--surface-overlay); color: var(--text-secondary);
+  border: 1px solid var(--border-default);
+}
+.tbl .chip.ok { color: var(--success); border-color: color-mix(in oklch, var(--success) 30%, transparent); background: color-mix(in oklch, var(--success) 10%, transparent); }
+.tbl .chip.warn { color: var(--warning); border-color: color-mix(in oklch, var(--warning) 30%, transparent); background: color-mix(in oklch, var(--warning) 10%, transparent); }
+.tbl .chip.err { color: var(--error); border-color: color-mix(in oklch, var(--error) 30%, transparent); background: color-mix(in oklch, var(--error) 10%, transparent); }
+
+/* Kbd */
+.kbd {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  border: 1px solid var(--border-default);
+  padding: 1px 5px; border-radius: 3px;
+  color: var(--text-secondary);
+  background: var(--surface-base);
+}
+
+/* Helpers */
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-2 { gap: 8px; } .gap-3 { gap: 12px; } .gap-4 { gap: 16px; }
+.flex-1 { flex: 1; min-width: 0; }
+.mb-2 { margin-bottom: 8px; } .mb-3 { margin-bottom: 12px; } .mb-4 { margin-bottom: 16px; }
+.mt-2 { margin-top: 8px; } .mt-3 { margin-top: 12px; } .mt-4 { margin-top: 16px; }
+.muted { color: var(--text-secondary); }
+.mono { font-family: var(--font-mono); }
+.small { font-size: 12px; }
+.xs { font-size: 11px; }
+.upper { text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+
+/* Tweaks panel */
+.tweaks-panel {
+  position: fixed; right: 16px; bottom: 16px; width: 280px;
+  background: var(--surface-overlay);
+  border: 1px solid var(--border-emphasis);
+  border-radius: 8px; padding: 14px; z-index: 100;
+  display: none;
+  box-shadow: var(--shadow-pop);
+}
+.tweaks-panel.active { display: block; }
+.tweaks-panel h4 { margin: 0 0 12px; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-accent); }
+.tweaks-panel label { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--text-secondary); margin-bottom: 10px; }
+.tweaks-panel select { background: var(--surface-input); border: 1px solid var(--border-input); color: var(--text-primary); padding: 4px 6px; border-radius: 5px; font-size: 12px; }
+
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+/* global React */
+
+// Shared data + reusable preview components
+
+const sampleTeam = [
+  { id: 180406, name: 'Jerry Gennaria',  role: 'President & CEO',        email: 'jerry@toky.com',   mobile: '314.496.4294', initials: 'JG', status: 'synced', template: 'standard', updated: '2d' },
+  { id: 180559, name: 'Alec Gleeson',    role: 'Creative Director',      email: 'alec@toky.com',    mobile: '314.555.0144', initials: 'AG', status: 'synced', template: 'standard', updated: '2d' },
+  { id: 180560, name: 'Alex Ray',        role: 'Art Director',           email: 'alex@toky.com',    mobile: '314.555.0188', initials: 'AR', status: 'synced', template: 'standard', updated: '5d' },
+  { id: 207191, name: 'Annie Martineau', role: 'Senior Designer',        email: 'annie@toky.com',   mobile: '314.555.0121', initials: 'AM', status: 'draft',  template: 'standard', updated: '1h' },
+  { id: 180563, name: 'Brian Hopson',    role: 'Strategist',             email: 'brian@toky.com',   mobile: '314.555.0167', initials: 'BH', status: 'synced', template: 'standard', updated: '2d' },
+  { id: 214018, name: 'Cherise Brock',   role: 'Account Director',       email: 'cherise@toky.com', mobile: '314.555.0198', initials: 'CB', status: 'synced', template: 'standard', updated: '2d' },
+  { id: 180565, name: 'Deana Frisch',    role: 'Producer',               email: 'deana@toky.com',   mobile: '314.555.0132', initials: 'DF', status: 'stale',  template: 'standard', updated: '32d' },
+  { id: 208505, name: 'Grace Keane',     role: 'Brand Designer',         email: 'grace@toky.com',   mobile: '314.555.0156', initials: 'GK', status: 'synced', template: 'standard', updated: '2d' },
+  { id: 211195, name: 'J. Chambers',     role: 'Developer',              email: 'j@toky.com',       mobile: '314.555.0172', initials: 'JC', status: 'synced', template: 'intern',   updated: '2d' },
+  { id: 200106, name: 'Jacob Goble',     role: 'Senior Developer',       email: 'jacob@toky.com',   mobile: '314.555.0109', initials: 'JG', status: 'synced', template: 'standard', updated: '2d' },
+  { id: 180570, name: 'Karen Abbott',    role: 'Controller',             email: 'karen@toky.com',   mobile: '314.555.0140', initials: 'KA', status: 'synced', template: 'standard', updated: '2d' },
+  { id: 180571, name: 'Lisa Mauer',      role: 'Account Supervisor',     email: 'lisa@toky.com',    mobile: '314.555.0141', initials: 'LM', status: 'synced', template: 'standard', updated: '2d' },
+];
+
+const defaultFields = {
+  salutation: 'Catch our podcast, The Intangible Brand.',
+  name: 'Jerry Gennaria',
+  credentials: '',
+  role: 'President & CEO',
+  company: 'TOKY',
+  tagline: 'Logic is Beautiful',
+  mobile: '314.496.4294',
+  email: 'jerry@toky.com',
+  address: '3141 Locust Street, Ste 100, St. Louis, MO 63103',
+  cta_label: 'Schedule a meeting.',
+  cta_url: 'https://calendly.com/gennaria/',
+};
+
+function SignaturePreview({ fields = defaultFields, showPlaceholders = false }) {
+  const f = fields;
+  const P = ({ k, v }) => showPlaceholders
+    ? <span className="ph-pill">{`{{ user.${k} }}`}</span>
+    : <>{v || <span className="ph-pill">empty</span>}</>;
+
+  return (
+    <div className="sig-preview">
+      <div className="sig-salutation"><P k="salutation" v={f.salutation} /></div>
+      <div className="sig-logo">
+        T<span className="o" />K Y<span className="reg">®</span>
+      </div>
+      <div className="sig-name"><P k="name" v={f.name} /></div>
+      <div className="sig-role"><P k="role" v={f.role} /></div>
+      <div className="sig-company"><P k="company" v={f.company} /></div>
+      <div className="sig-tagline"><P k="tagline" v={f.tagline} /></div>
+      <div className="sig-row">
+        <span className="k">m.</span> <P k="mobile" v={f.mobile} />
+        <span className="sep">|</span>
+        <span className="k">e.</span> <P k="email" v={f.email} />
+      </div>
+      <div className="sig-row" style={{marginTop:4}}><P k="address" v={f.address} /></div>
+      <div className="sig-cta"><P k="cta_label" v={f.cta_label} /></div>
+      <div className="sig-socials">
+        <span>in</span><span>ig</span><span>f</span><span>x</span>
+      </div>
+    </div>
+  );
+}
+
+function CharCounter({ chars = 6230, limit = 10000, label = 'Gmail limit' }) {
+  const pct = chars / limit;
+  const cls = pct > 0.95 ? 'err' : pct > 0.8 ? 'warn' : '';
+  return (
+    <div className={`char-counter ${cls}`}>
+      <div className="bar"><div className="fill" style={{width: `${Math.min(pct*100, 100)}%`}} /></div>
+      <span>{chars.toLocaleString()} / {limit.toLocaleString()}</span>
+      <span style={{color:'var(--text-muted)'}}>{label}</span>
+    </div>
+  );
+}
+
+Object.assign(window, { sampleTeam, defaultFields, SignaturePreview, CharCounter });
+
+</script>
+<script type="text/babel" data-presets="react">
+/* global React, SignaturePreview, CharCounter, sampleTeam */
+
+// Team page — roster-first, view-only per-person.
+// No inline editing of individual fields. Row click opens a read-only detail
+// panel showing their rendered signature + status, with actions: download,
+// resend, resync-from-Airtable, open template, etc.
+function TeamPage() {
+  const [selected, setSelected] = React.useState(180406);
+  const [checked, setChecked] = React.useState(new Set([180559, 180560, 207191]));
+  const [filter, setFilter] = React.useState('all');
+
+  const person = sampleTeam.find(p => p.id === selected);
+
+  const toggle = (id) => {
+    const next = new Set(checked);
+    if (next.has(id)) next.delete(id); else next.add(id);
+    setChecked(next);
+  };
+
+  const filtered = sampleTeam.filter(p => {
+    if (filter === 'all') return true;
+    return p.status === filter;
+  });
+
+  return (
+    <div style={{padding:'20px 28px', display:'grid', gap:16}}>
+
+      {/* Page header */}
+      <div className="flex items-center gap-3">
+        <div>
+          <h2 style={{margin:0, fontSize:20, fontWeight:700, letterSpacing:'-0.02em'}}>Team signatures</h2>
+          <div className="small muted" style={{marginTop:2}}>20 active · 1 draft · 1 stale · synced from Airtable 2 min ago</div>
+        </div>
+        <div style={{flex:1}} />
+        <input className="input" placeholder="Search team…" style={{maxWidth:220}} />
+        <select className="input" style={{maxWidth:160}} value={filter} onChange={e=>setFilter(e.target.value)}>
+          <option value="all">All statuses</option>
+          <option value="synced">Synced</option>
+          <option value="draft">Draft</option>
+          <option value="stale">Stale</option>
+        </select>
+        <button className="btn ghost">⤓ Resync Airtable</button>
+        <button className="btn primary">+ Add person</button>
+      </div>
+
+      {/* Bulk action strip — appears when rows checked */}
+      {checked.size > 0 && (
+        <div className="panel" style={{padding:'10px 14px', display:'flex', alignItems:'center', gap:12, background:'var(--surface-overlay)'}}>
+          <span className="small"><b>{checked.size} selected</b></span>
+          <div style={{width:1, height:18, background:'var(--border-default)'}} />
+          <button className="btn sm ghost">↻ Push template change</button>
+          <button className="btn sm ghost">🖼 Swap banner</button>
+          <button className="btn sm ghost">✉ Email signatures</button>
+          <button className="btn sm ghost">⤓ Download ZIP</button>
+          <div style={{flex:1}} />
+          <button className="btn sm" onClick={()=>setChecked(new Set())}>Clear</button>
+        </div>
+      )}
+
+      <div style={{display:'grid', gridTemplateColumns:'1fr 440px', gap:16, alignItems:'start'}}>
+
+        {/* Roster table */}
+        <div className="panel" style={{overflow:'hidden'}}>
+          <table className="tbl">
+            <thead>
+              <tr>
+                <th style={{width:28}}>
+                  <input type="checkbox"
+                         checked={checked.size === filtered.length && filtered.length > 0}
+                         onChange={e => setChecked(e.target.checked ? new Set(filtered.map(p=>p.id)) : new Set())} />
+                </th>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Template</th>
+                <th>Status</th>
+                <th style={{width:90}}>Size</th>
+                <th style={{width:80}}>Updated</th>
+                <th style={{width:40}}></th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((p, i) => (
+                <tr key={p.id}
+                    className={selected===p.id?'selected':''}
+                    onClick={()=>setSelected(p.id)}>
+                  <td onClick={e=>e.stopPropagation()}>
+                    <input type="checkbox" checked={checked.has(p.id)} onChange={()=>toggle(p.id)} />
+                  </td>
+                  <td>
+                    <div className="flex items-center gap-3">
+                      <span className="avatar">{p.initials}</span>
+                      <div>
+                        <div style={{fontWeight:600}}>{p.name}</div>
+                        <div className="xs muted mono">{p.email}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="muted">{p.role}</td>
+                  <td><span className="chip">{p.template === 'intern' ? 'Intern v1' : 'Standard v3'}</span></td>
+                  <td>
+                    {p.status==='synced' && <span className="chip ok">● synced</span>}
+                    {p.status==='draft'  && <span className="chip warn">● draft</span>}
+                    {p.status==='stale'  && <span className="chip err">● stale</span>}
+                  </td>
+                  <td className="mono xs muted">{(6100 + i*37).toLocaleString()} ch</td>
+                  <td className="xs muted">{p.updated} ago</td>
+                  <td onClick={e=>e.stopPropagation()}><button className="btn sm">⋯</button></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div style={{padding:'10px 14px', borderTop:'1px solid var(--border-default)', display:'flex', alignItems:'center', gap:10}}>
+            <span className="small muted">Showing {filtered.length} of {sampleTeam.length}</span>
+            <div style={{flex:1}} />
+            <button className="btn sm ghost">‹</button>
+            <button className="btn sm" style={{background:'var(--surface-overlay)'}}>1</button>
+            <button className="btn sm ghost">2</button>
+            <button className="btn sm ghost">›</button>
+          </div>
+        </div>
+
+        {/* Detail rail — read-only */}
+        <div style={{position:'sticky', top:80, display:'flex', flexDirection:'column', gap:12}}>
+          <div className="panel">
+            <div className="panel-header">
+              <span>Signature preview</span>
+              <span className="spacer" />
+              <span className="muted">{person.name}</span>
+            </div>
+            <div style={{padding:22, background:'var(--surface-base)', display:'flex', justifyContent:'center', borderBottom:'1px solid var(--border-default)'}}>
+              <SignaturePreview fields={{...defaultFields, name: person.name, role: person.role, email: person.email, mobile: person.mobile}} />
+            </div>
+            <div style={{padding:'10px 14px', display:'flex', gap:6, flexWrap:'wrap'}}>
+              <button className="btn sm ghost">📋 Copy as rich text</button>
+              <button className="btn sm ghost">⤓ HTML file</button>
+              <button className="btn sm ghost">✉ Email to {person.name.split(' ')[0]}</button>
+              <button className="btn sm ghost">🔗 Gmail install link</button>
+            </div>
+          </div>
+
+          {/* Read-only field snapshot */}
+          <div className="panel">
+            <div className="panel-header">
+              <span>Field values</span>
+              <span className="spacer" />
+              <span className="tag accent">Airtable · read-only</span>
+            </div>
+            <div className="panel-body" style={{padding:'4px 16px'}}>
+              {[
+                ['Name', person.name, 'People.Name'],
+                ['Role', person.role, 'People.Role'],
+                ['Mobile', person.mobile, 'People.Mobile'],
+                ['Email', person.email, 'People.Email'],
+                ['Salutation', 'Catch our podcast, The Intangible Brand.', 'Template default'],
+                ['CTA', 'Schedule a meeting.', 'People.CTA'],
+                ['CTA URL', 'calendly.com/gennaria/', 'People.CTA_URL'],
+              ].map(([k, v, src], i) => (
+                <div key={i} className="fieldrow" style={{gridTemplateColumns:'100px 1fr', padding:'8px 0'}}>
+                  <label style={{padding:0}}>{k}</label>
+                  <div>
+                    <div style={{fontSize:13}}>{v}</div>
+                    <div className="sub mono">◇ {src}</div>
+                  </div>
+                </div>
+              ))}
+              <div className="fieldrow" style={{gridTemplateColumns:'100px 1fr', padding:'10px 0', borderBottom:0}}>
+                <label style={{padding:0}}>Edit in</label>
+                <div className="flex gap-2">
+                  <button className="btn sm ghost">↗ Open in Airtable</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="panel">
+            <div className="panel-header">
+              <span>Template</span>
+              <span className="spacer" />
+              <button className="btn xs">Open →</button>
+            </div>
+            <div className="panel-body flex items-center gap-3" style={{padding:14}}>
+              <div style={{
+                width:44, height:44,
+                background:'var(--surface-overlay)',
+                border:'1px solid var(--border-default)',
+                borderRadius:5,
+                display:'flex', alignItems:'center', justifyContent:'center',
+                fontFamily:'var(--font-mono)', fontSize:10, color:'var(--text-accent)'
+              }}>{'{ }'}</div>
+              <div className="flex-1">
+                <div style={{fontWeight:600, fontSize:13}}>TOKY Standard v3</div>
+                <div className="xs muted">Last edited by Jerry · 2d ago · used by 18</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer bar with char counter */}
+      <div style={{position:'fixed', bottom:16, left:16, zIndex:50}}>
+        <CharCounter chars={6230 + (person.id % 800)} />
+      </div>
+    </div>
+  );
+}
+
+window.TeamPage = TeamPage;
+
+</script>
+<script type="text/babel" data-presets="react">
+/* global React, SignaturePreview, CharCounter */
+
+// Templates page — three-pane IDE:
+// left: HTML code · center: rendered preview · right: Airtable data bindings
+function TemplatesPage() {
+  const [tab, setTab] = React.useState('html');
+  const [showPH, setShowPH] = React.useState(false);
+  const [tpl, setTpl] = React.useState('standard');
+
+  return (
+    <div style={{display:'flex', flexDirection:'column', height:'calc(100vh - 57px)'}}>
+
+      {/* Template switcher / toolbar */}
+      <div className="flex items-center gap-3" style={{padding:'10px 22px', borderBottom:'1px solid var(--border-default)', background:'var(--surface-raised)'}}>
+        <select className="input" style={{width:220}} value={tpl} onChange={e=>setTpl(e.target.value)}>
+          <option value="standard">TOKY Standard v3 · 18 users</option>
+          <option value="intern">Intern v1 · 1 user</option>
+          <option value="minimal">Minimal · 1 user</option>
+        </select>
+        <button className="btn sm ghost">+ New template</button>
+        <div style={{width:1, height:20, background:'var(--border-default)'}} />
+        <span className="mono xs muted">templates / toky-standard-v3.html</span>
+        <span className="tag accent">● unsaved</span>
+        <div style={{flex:1}} />
+        <div className="flex items-center gap-2">
+          <span className="muted xs">Test with</span>
+          <select className="input" style={{width:180}} defaultValue="jerry">
+            <option value="jerry">Jerry Gennaria</option>
+            <option>Alec Gleeson</option>
+            <option>Annie Martineau</option>
+            <option disabled>──────────</option>
+            <option>Blank / placeholders</option>
+          </select>
+        </div>
+        <CharCounter chars={6230} />
+        <button className="btn ghost">History</button>
+        <button className="btn ghost">Commit v4</button>
+        <button className="btn primary">Push to 18 →</button>
+      </div>
+
+      {/* Three panes */}
+      <div style={{flex:1, display:'grid', gridTemplateColumns:'1.15fr 1fr 360px', minHeight:0}}>
+
+        {/* LEFT — editor */}
+        <div style={{display:'flex', flexDirection:'column', borderRight:'1px solid var(--border-default)', minWidth:0}}>
+          <div className="flex" style={{borderBottom:'1px solid var(--border-default)', background:'var(--surface-raised)'}}>
+            {[['html','signature.html'],['css','inline-styles.css'],['partials','partials · 3']].map(([t,label]) => (
+              <button key={t} onClick={()=>setTab(t)} className="btn sm" style={{
+                borderRadius:0, padding:'10px 14px',
+                color: tab===t?'var(--text-primary)':'var(--text-secondary)',
+                borderBottom: tab===t ? '2px solid var(--primary)' : '2px solid transparent',
+                background: tab===t ? 'var(--surface-base)' : 'transparent',
+              }}>{label}</button>
+            ))}
+            <div style={{flex:1}} />
+            <button className="btn sm ghost" style={{margin:4}}>Format</button>
+            <button className="btn sm ghost" style={{margin:4}}>Minify ↓</button>
+          </div>
+          <div style={{flex:1, overflow:'auto', padding:16, background:'var(--surface-base)'}}>
+            <div className="code" style={{border:0, padding:'0 0 0 40px'}}>
+              <span className="ln"><span className="c">{'<!-- Gmail-safe inline-table signature -->'}</span></span>
+              <span className="ln"><span className="t">{'<table'}</span> <span className="a">cellpadding</span>=<span className="s">"0"</span> <span className="a">cellspacing</span>=<span className="s">"0"</span> <span className="a">border</span>=<span className="s">"0"</span></span>
+              <span className="ln">{'       '}<span className="a">style</span>=<span className="s">"font-family:Helvetica,Arial,sans-serif;width:265px;"</span><span className="t">{'>'}</span></span>
+              <span className="ln">{'  '}<span className="t">{'<tr>'}</span><span className="t">{'<td>'}</span></span>
+              <span className="ln">{'    '}<span className="c">{'{% if user.salutation %}'}</span></span>
+              <span className="ln">{'    '}<span className="t">{'<a'}</span> <span className="a">href</span>=<span className="s">{'"{{ user.salutation_url }}"'}</span><span className="t">{'>'}</span></span>
+              <span className="ln">{'      '}<span className="ph">{`{{ user.salutation }}`}</span></span>
+              <span className="ln">{'    '}<span className="t">{'</a>'}</span></span>
+              <span className="ln">{'    '}<span className="c">{'{% endif %}'}</span></span>
+              <span className="ln">{'    '}<span className="t">{'<img'}</span> <span className="a">src</span>=<span className="s">{'"{{ asset.logo_url }}"'}</span> <span className="a">width</span>=<span className="s">"101"</span><span className="t">{'/>'}</span></span>
+              <span className="ln">{'    '}<span className="t">{'<div'}</span> <span className="a">style</span>=<span className="s">"color:#be1900;font-weight:700"</span><span className="t">{'>'}</span></span>
+              <span className="ln">{'      '}<span className="ph">{`{{ user.name }}`}</span> <span className="ph">{`{{ user.credentials }}`}</span></span>
+              <span className="ln">{'    '}<span className="t">{'</div>'}</span></span>
+              <span className="ln">{'    '}<span className="t">{'<div>'}</span><span className="ph">{`{{ user.role }}`}</span><span className="t">{'</div>'}</span></span>
+              <span className="ln">{'    '}<span className="t">{'<div'}</span> <span className="a">style</span>=<span className="s">"font-weight:700"</span><span className="t">{'>'}</span><span className="ph">{`{{ user.company }}`}</span><span className="t">{'</div>'}</span></span>
+              <span className="ln">{'    '}<span className="t">{'<div'}</span> <span className="a">style</span>=<span className="s">"font-style:italic"</span><span className="t">{'>'}</span><span className="ph">{`{{ user.tagline }}`}</span><span className="t">{'</div>'}</span></span>
+              <span className="ln">{'    '}<span className="c">{'{% include "partials/contact-line.html" %}'}</span></span>
+              <span className="ln">{'    '}<span className="c">{'{% include "partials/address.html" %}'}</span></span>
+              <span className="ln">{'    '}<span className="t">{'<a'}</span> <span className="a">href</span>=<span className="s">{'"{{ user.cta_url }}"'}</span><span className="t">{'>'}</span><span className="ph">{`{{ user.cta_label }}`}</span><span className="t">{'</a>'}</span></span>
+              <span className="ln">{'    '}<span className="c">{'{% include "partials/socials.html" %}'}</span></span>
+              <span className="ln">{'  '}<span className="t">{'</td>'}</span><span className="t">{'</tr>'}</span></span>
+              <span className="ln"><span className="t">{'</table>'}</span></span>
+            </div>
+          </div>
+          <div style={{padding:'8px 14px', borderTop:'1px solid var(--border-default)', background:'var(--surface-raised)', display:'flex', gap:16, fontSize:11, color:'var(--text-secondary)'}}>
+            <span>Ln 14, Col 28</span>
+            <span>Liquid</span>
+            <span>UTF-8</span>
+            <div style={{flex:1}} />
+            <span className="mono">● valid · 11 placeholders · 3 partials</span>
+          </div>
+        </div>
+
+        {/* CENTER — preview */}
+        <div style={{display:'flex', flexDirection:'column', borderRight:'1px solid var(--border-default)', minWidth:0, background:'var(--surface-base)'}}>
+          <div className="flex items-center gap-2" style={{padding:'8px 14px', borderBottom:'1px solid var(--border-default)', background:'var(--surface-raised)'}}>
+            <span className="xs muted mono">preview</span>
+            <select className="input" style={{width:160}} defaultValue="gmail-web">
+              <option value="gmail-web">Gmail · Web</option>
+              <option>Gmail · iOS</option>
+              <option>Outlook</option>
+              <option>Apple Mail</option>
+            </select>
+            <div style={{flex:1}} />
+            <div className="flex" style={{background:'var(--surface-base)', border:'1px solid var(--border-default)', borderRadius:5, padding:2}}>
+              <button className="btn xs" onClick={()=>setShowPH(false)} style={{background: showPH?'transparent':'var(--surface-overlay)', color: showPH?'var(--text-secondary)':'var(--text-primary)'}}>Rendered</button>
+              <button className="btn xs" onClick={()=>setShowPH(true)} style={{background: showPH?'var(--surface-overlay)':'transparent', color: showPH?'var(--text-primary)':'var(--text-secondary)'}}>Placeholders</button>
+            </div>
+          </div>
+          <div style={{flex:1, overflow:'auto', padding:'32px 24px', display:'flex', justifyContent:'center', alignItems:'flex-start'}}>
+            <div style={{display:'flex', flexDirection:'column', gap:14, alignItems:'center'}}>
+              <SignaturePreview showPlaceholders={showPH} />
+              <div className="xs muted" style={{marginTop:8}}>265 × 360 px · rendered in Helvetica</div>
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT — bindings */}
+        <div style={{display:'flex', flexDirection:'column', minWidth:0, background:'var(--surface-raised)'}}>
+          <div className="panel-header" style={{borderBottom:'1px solid var(--border-default)'}}>
+            <span>Data bindings</span>
+            <span className="spacer" />
+            <button className="btn xs ghost">⟲</button>
+          </div>
+
+          <div style={{padding:14, borderBottom:'1px solid var(--border-default)'}}>
+            <div className="xs muted mb-2 upper">Source</div>
+            <div style={{padding:10, border:'1px solid var(--border-default)', borderRadius:6, background:'var(--surface-base)'}}>
+              <div className="flex items-center gap-2">
+                <span style={{width:8, height:8, borderRadius:'50%', background:'var(--success)'}} />
+                <span className="small mono" style={{color:'var(--text-primary)'}}>Airtable</span>
+              </div>
+              <div className="xs muted mono" style={{marginTop:4}}>appK7fQ··· / tblPeople</div>
+              <div className="xs muted">20 records · 11 fields mapped · synced 2m ago</div>
+              <div className="mt-2 flex gap-2">
+                <button className="btn xs ghost">Change base</button>
+                <button className="btn xs ghost">Resync</button>
+              </div>
+            </div>
+          </div>
+
+          <div style={{flex:1, overflow:'auto', padding:'10px 14px'}}>
+            <div className="xs muted mb-2 upper">Placeholders · 11</div>
+            {[
+              ['user.salutation',     'Salutation',        'text',    'ok'],
+              ['user.salutation_url', 'Salutation.URL',    'url',     'ok'],
+              ['user.name',           'Name',              'text',    'ok'],
+              ['user.credentials',    'Credentials',       'text',    'optional'],
+              ['user.role',           'Role',              'text',    'ok'],
+              ['user.company',        '(static)',          'text',    'static'],
+              ['user.tagline',        '(static)',          'text',    'static'],
+              ['user.mobile',         'Mobile',            'phone',   'ok'],
+              ['user.email',          'Email',             'email',   'ok'],
+              ['user.cta_label',      'CTA',               'text',    'ok'],
+              ['user.cta_url',        'CTA.URL',           'url',     'ok'],
+            ].map(([ph, fld, type, status]) => (
+              <div key={ph} style={{
+                padding:10, marginBottom:6,
+                background:'var(--surface-base)',
+                border:'1px solid var(--border-default)',
+                borderRadius:6
+              }}>
+                <div className="flex items-center justify-between">
+                  <span className="mono xs" style={{color:'var(--text-accent)'}}>{`{{ ${ph} }}`}</span>
+                  <span className="xs mono muted">{type}</span>
+                </div>
+                <div className="xs mono mt-2 flex items-center gap-2" style={{color:'var(--text-muted)'}}>
+                  <span>→</span>
+                  <span style={{color:'var(--text-primary)'}}>{fld}</span>
+                  <div style={{flex:1}} />
+                  {status === 'ok' && <span style={{color:'var(--success)'}}>✓</span>}
+                  {status === 'optional' && <span>○ optional</span>}
+                  {status === 'static' && <span>⌨ static</span>}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{padding:'10px 14px', borderTop:'1px solid var(--border-default)'}}>
+            <button className="btn ghost" style={{width:'100%', justifyContent:'center'}}>+ Add placeholder</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+window.TemplatesPage = TemplatesPage;
+
+</script>
+
+<script type="text/babel" data-presets="react">
+/* global React, ReactDOM, TeamPage, TemplatesPage */
+
+const TWEAKS = /*EDITMODE-BEGIN*/{
+  "theme": "dark",
+  "page": "team",
+  "density": "comfortable"
+}/*EDITMODE-END*/;
+
+function App() {
+  const [theme, setTheme] = React.useState(() => localStorage.getItem('toky_theme') || TWEAKS.theme);
+  const [page, setPage]   = React.useState(() => localStorage.getItem('toky_page')  || TWEAKS.page);
+  const [tweaksOpen, setTweaksOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem('toky_theme', theme);
+  }, [theme]);
+  React.useEffect(() => { localStorage.setItem('toky_page', page); }, [page]);
+
+  // Tweaks protocol
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      if (e.data?.type === '__activate_edit_mode') setTweaksOpen(true);
+      if (e.data?.type === '__deactivate_edit_mode') setTweaksOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const setTweak = (k, v) => {
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [k]: v } }, '*');
+    if (k === 'theme') setTheme(v);
+    if (k === 'page') setPage(v);
+  };
+
+  return (
+    <div className="app">
+      <header className="topbar">
+        <div className="logo">
+          <span className="mark">T<span className="o" />K Y</span>
+          <small>Email Signature Editor</small>
+        </div>
+        <nav data-screen-label={page === 'team' ? '01 Team' : '02 Templates'}>
+          <button className={page==='team'?'active':''} onClick={()=>setPage('team')}>Team</button>
+          <button className={page==='templates'?'active':''} onClick={()=>setPage('templates')}>Templates</button>
+        </nav>
+        <div className="spacer" />
+        <span className="pill ok">● Airtable · synced 2m</span>
+        <div className="theme-toggle" role="tablist" aria-label="Theme">
+          <button className={theme==='light'?'on':''} onClick={()=>setTheme('light')}>Light</button>
+          <button className={theme==='dark'?'on':''}  onClick={()=>setTheme('dark')}>Dark</button>
+        </div>
+        <span className="avatar" title="jerry@toky.com">JG</span>
+      </header>
+
+      <main>
+        {page === 'team' && <TeamPage />}
+        {page === 'templates' && <TemplatesPage />}
+      </main>
+
+      <div className={`tweaks-panel ${tweaksOpen?'active':''}`}>
+        <h4>Tweaks</h4>
+        <label>Theme
+          <select value={theme} onChange={e=>setTweak('theme', e.target.value)}>
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+          </select>
+        </label>
+        <label>Page
+          <select value={page} onChange={e=>setTweak('page', e.target.value)}>
+            <option value="team">Team</option>
+            <option value="templates">Templates</option>
+          </select>
+        </label>
+        <div className="xs muted mt-3" style={{lineHeight:1.5}}>
+          Use the top nav to switch between <b>Team</b> (roster) and <b>Templates</b> (three-pane IDE).
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

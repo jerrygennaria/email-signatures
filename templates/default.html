@@ -1,0 +1,76 @@
+<!--
+  TOKY email signature template
+  ------------------------------------------------------------
+  Variables (provided by n8n renderer, see AGENTS.md):
+    user.full_name     required  "Jerry Gennaria"
+    user.job_title     required  "President & CEO"
+    user.phone         required  "314.496.4294"
+    user.email         required  "jerry@toky.com"
+    user.credentials   optional  "B.C.Sc."
+    user.calendly_url  optional  "https://calendly.com/gennaria/"
+
+  Conventions:
+    - Table-based layout with inline styles. No <style> block (Gmail strips it).
+    - Spacer rows use height + font-size:0 + line-height:0. Never rely on margin.
+    - Images have explicit width/height attributes AND CSS width/height.
+    - Image paths point to jsDelivr CDN backed by this repo's main branch.
+    - Asset changes require a commit; jsDelivr caches briefly (~12 hours).
+
+  To add a social icon:
+    1. Drop PNG into /assets (48x48, displayed at 24x24).
+    2. Add a <td> + spacer <td width="4"> to the socials table below.
+-->
+<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;width:265px;">
+<tbody>
+
+<!-- Top CTA -->
+<tr><td style="padding:0;"><a href="https://www.theintangiblebrand.com" style="color:#666;text-decoration:underline;font-size:11px;line-height:15px;font-weight:bold;">Catch our podcast, The Intangible Brand.</a></td></tr>
+<tr><td style="height:15px;font-size:0;line-height:0;">&nbsp;</td></tr>
+
+<!-- Logo -->
+<tr><td style="padding:0;"><a href="https://www.toky.com" style="text-decoration:none;border:0;"><img src="https://cdn.jsdelivr.net/gh/jerrygennaria/email-signatures@main/assets/toky-logo.png" width="98" height="23" alt="TOKY" style="display:block;border:0;width:98px;height:23px;"></a></td></tr>
+<tr><td style="height:15px;font-size:0;line-height:0;">&nbsp;</td></tr>
+
+<!-- Name + optional credentials -->
+<tr><td style="font-size:11px;line-height:15px;color:#be1900;font-weight:bold;padding:0;">{{ user.full_name }}{{#if user.credentials}}, {{ user.credentials }}{{/if}}</td></tr>
+
+<!-- Role -->
+<tr><td style="font-size:11px;line-height:15px;color:#666;padding:0;">{{ user.job_title }}</td></tr>
+<tr><td style="height:15px;font-size:0;line-height:0;">&nbsp;</td></tr>
+
+<!-- Company -->
+<tr><td style="font-size:11px;line-height:15px;color:#666;font-weight:bold;padding:0;">TOKY</td></tr>
+
+<!-- Tagline -->
+<tr><td style="font-size:11px;line-height:15px;color:#666;font-style:italic;padding:0;">Logic is Beautiful</td></tr>
+<tr><td style="height:15px;font-size:0;line-height:0;">&nbsp;</td></tr>
+
+<!-- Contact line -->
+<tr><td style="font-size:11px;line-height:15px;color:#666;padding:0;"><strong style="color:#be1900;">m.</strong> {{ user.phone }} &nbsp;<span style="color:#666;">|</span>&nbsp; <strong style="color:#be1900;">e.</strong> <a href="mailto:{{ user.email }}" style="color:#666;text-decoration:none;">{{ user.email }}</a></td></tr>
+
+<!-- Address -->
+<tr><td style="font-size:11px;line-height:15px;color:#666;padding:0;">3141 Locust Street, Ste 100, St. Louis, MO 63103</td></tr>
+
+<!-- Calendly (optional) -->
+{{#if user.calendly_url}}
+<tr><td style="height:15px;font-size:0;line-height:0;">&nbsp;</td></tr>
+<tr><td style="font-size:11px;line-height:15px;padding:0;"><a href="{{ user.calendly_url }}" style="color:#be1900;text-decoration:none;font-weight:bold;">Schedule a meeting.</a></td></tr>
+{{/if}}
+
+<tr><td style="height:15px;font-size:0;line-height:0;">&nbsp;</td></tr>
+
+<!-- Social icons -->
+<tr><td style="padding:0;">
+<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:collapse;"><tbody><tr>
+<td style="padding:0;"><a href="https://www.linkedin.com/company/toky-branding/" style="text-decoration:none;border:0;"><img src="https://cdn.jsdelivr.net/gh/jerrygennaria/email-signatures@main/assets/social-linkedin.png" width="24" height="24" alt="LinkedIn" style="display:block;border:0;width:24px;height:24px;"></a></td>
+<td width="4" style="font-size:0;line-height:0;">&nbsp;</td>
+<td style="padding:0;"><a href="https://www.instagram.com/tokybd/" style="text-decoration:none;border:0;"><img src="https://cdn.jsdelivr.net/gh/jerrygennaria/email-signatures@main/assets/social-instagram.png" width="24" height="24" alt="Instagram" style="display:block;border:0;width:24px;height:24px;"></a></td>
+<td width="4" style="font-size:0;line-height:0;">&nbsp;</td>
+<td style="padding:0;"><a href="https://www.facebook.com/tokydesign" style="text-decoration:none;border:0;"><img src="https://cdn.jsdelivr.net/gh/jerrygennaria/email-signatures@main/assets/social-facebook.png" width="24" height="24" alt="Facebook" style="display:block;border:0;width:24px;height:24px;"></a></td>
+<td width="4" style="font-size:0;line-height:0;">&nbsp;</td>
+<td style="padding:0;"><a href="https://twitter.com/tokybd" style="text-decoration:none;border:0;"><img src="https://cdn.jsdelivr.net/gh/jerrygennaria/email-signatures@main/assets/social-twitter.png" width="24" height="24" alt="X" style="display:block;border:0;width:24px;height:24px;"></a></td>
+</tr></tbody></table>
+</td></tr>
+
+</tbody>
+</table>
