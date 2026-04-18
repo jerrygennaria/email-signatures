@@ -13,12 +13,12 @@ This is the MVP. A web-app version is planned later — the template syntax, Air
 
 ## Related systems
 
-- **Airtable base**: TOKY-OS (`app5k5yjBYejRneho`)
-- **Airtable table**: Employees (`tblIi596i2VjIrTjI`)
-- **n8n workflows**: `email-signature-generate-one` (webhook) and `email-signature-generate-all` (manual)
+- **Airtable base**: TOKY-OS (base ID and table IDs in the local `CLAUDE.md`, which is gitignored)
+- **Airtable table**: Employees
+- **n8n workflows**: `email-signature-generate-one` (webhook) and `email-signature-generate-all` (manual). n8n host URL is in the local `CLAUDE.md`.
 - **GitHub repo**: `github.com/jerrygennaria/email-signatures` (public)
 - **jsDelivr URL pattern**: `https://cdn.jsdelivr.net/gh/jerrygennaria/email-signatures@main/<path>`
-- **Delivery from address**: `automation@toky.com`
+- **Delivery from address**: internal TOKY automation account (see local `CLAUDE.md`)
 
 ## Repo layout
 
@@ -59,7 +59,7 @@ Before changing the template structure, consider why the defensive patterns are 
 
 ## Airtable fields used by the template
 
-On Employees (`tblIi596i2VjIrTjI`):
+On the Employees table:
 
 | Field | Used for |
 |---|---|

@@ -6,3 +6,7 @@ node_modules/
 preview.html
 temporary screenshots/
 package-lock.json
+
+# Project-specific Claude context (contains n8n host, Airtable IDs, etc.)
+# Public repo uses AGENTS.md for generic guidance; CLAUDE.md holds local specifics.
+CLAUDE.md

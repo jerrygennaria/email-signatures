@@ -107,8 +107,8 @@ return {
 2. **Airtable — Get record**
    - Resource: Record
    - Operation: Get
-   - Base: `app5k5yjBYejRneho` (TOKY-OS)
-   - Table: `tblIi596i2VjIrTjI` (Employees)
+   - Base: TOKY-OS (base ID in local `CLAUDE.md`)
+   - Table: Employees (table ID in local `CLAUDE.md`)
    - Record ID: `={{ $json.query.record_id }}`
 
 3. **Code — "Render signature"**
@@ -116,7 +116,7 @@ return {
 
 4. **Gmail (or SMTP) — Send email**
    - To Email: `={{ $json.to }}`
-   - From: `automation@toky.com` (must be authorized in the connected Gmail account)
+   - From: TOKY automation account (see local `CLAUDE.md`; must be authorized in the connected Gmail credential)
    - Subject: `={{ $json.subject }}`
    - Email Format: HTML
    - Message: (see "Email body template" below)
@@ -152,8 +152,8 @@ return {
 2. **Airtable — List records**
    - Resource: Record
    - Operation: Search
-   - Base: `app5k5yjBYejRneho`
-   - Table: `tblIi596i2VjIrTjI`
+   - Base: TOKY-OS (base ID in local `CLAUDE.md`)
+   - Table: Employees (table ID in local `CLAUDE.md`)
    - Filter By Formula: `AND({Status} = 'Active', {Email} != '')`
    - Return All: true
 
