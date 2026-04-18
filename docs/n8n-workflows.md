@@ -211,7 +211,7 @@ On the Employees table, add a Button field named `Generate Signature`:
   "https://<your-n8n-host>/webhook/email-signature/generate?record_id=" & RECORD_ID()
   ```
 
-(Replace `<your-n8n-host>` with the base URL of your n8n instance, e.g. `n8n.toky.com`.)
+(Replace `<your-n8n-host>` with the base URL of your n8n instance.)
 
 Clicking the button opens a new tab pointed at the webhook. n8n renders and sends the email, then returns the confirmation page from the Respond to Webhook node.
 
