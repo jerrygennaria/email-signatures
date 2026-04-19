@@ -10,3 +10,8 @@ package-lock.json
 # Project-specific Claude context (contains n8n host, Airtable IDs, etc.)
 # Public repo uses AGENTS.md for generic guidance; CLAUDE.md holds local specifics.
 CLAUDE.md
+
+# Design source files (Illustrator, Photoshop) — large and not needed for delivery.
+# Exported PNGs go under assets/ and do get committed.
+*.ai
+*.psd

@@ -74,7 +74,7 @@ On the Employees table:
 
 ## Adding a new social icon
 
-1. Drop a 48×48 PNG into `assets/` named `social-<platform>.png`.
+1. Drop a 48×48 PNG into `assets/` named `<platform>.png` (e.g., `bluesky.png`).
 2. Edit `templates/default.html` — copy an existing `<td>` block in the socials table and update `href`, `src`, `alt`.
 3. Commit, push. jsDelivr picks up the new file within ~12 hours (or force-purge via `https://purge.jsdelivr.net/gh/...`).
 4. Trigger a bulk regenerate from n8n.
