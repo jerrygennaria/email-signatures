@@ -198,22 +198,27 @@ ${ $json.renderedHtml }
 
 ---
 
-## Airtable button setup
+## Airtable button setup (manual step)
 
-On the Employees table, add a Button field named `Generate Signature`:
+Airtable's public API does not allow creating button fields programmatically, so this one has to be done in the Airtable UI.
 
-- Label: `Generate Signature`
-- Style: Red / brand
-- Action: **Open URL**
-- URL formula:
+1. Open the Employees table in the TOKY-OS base.
+2. Click `+` to add a field. Name it `Generate Signature`. Type: **Button**.
+3. In the button configuration:
+   - **Label**: `Generate Signature`
+   - **Style**: Red (or whichever matches your convention)
+   - **Action**: **Open URL**
+   - **URL formula** (paste verbatim, using your n8n host from the local `CLAUDE.md`):
 
-  ```
-  "https://<your-n8n-host>/webhook/email-signature/generate?record_id=" & RECORD_ID()
-  ```
+     ```
+     "https://<your-n8n-host>/webhook/email-signature-generate?record_id=" & RECORD_ID()
+     ```
 
-(Replace `<your-n8n-host>` with the base URL of your n8n instance.)
+4. Save the field.
 
 Clicking the button opens a new tab pointed at the webhook. n8n renders and sends the email, then returns the confirmation page from the Respond to Webhook node.
+
+**Note**: the button won't work until the `email-signature-generate-one` workflow is marked Active in n8n. Clicks on an inactive workflow's webhook will return a 404.
 
 ---
 
