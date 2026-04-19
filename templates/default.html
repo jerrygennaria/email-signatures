@@ -32,7 +32,7 @@
 <tr><td style="height:15px;font-size:0;line-height:0;">&nbsp;</td></tr>
 
 <!-- Name + optional credentials -->
-<tr><td style="font-size:11px;line-height:15px;color:#9E0085;font-weight:bold;padding:0;">{{ user.full_name }}{{#if user.credentials}}, {{ user.credentials }}{{/if}}</td></tr>
+<tr><td style="font-size:11px;line-height:15px;color:#B4006E;font-weight:bold;padding:0;">{{ user.full_name }}{{#if user.credentials}}, {{ user.credentials }}{{/if}}</td></tr>
 
 <!-- Role -->
 <tr><td style="font-size:11px;line-height:15px;color:#666;padding:0;">{{ user.job_title }}</td></tr>
@@ -46,7 +46,7 @@
 <tr><td style="height:15px;font-size:0;line-height:0;">&nbsp;</td></tr>
 
 <!-- Contact line -->
-<tr><td style="font-size:11px;line-height:15px;color:#666;padding:0;"><strong style="color:#9E0085;">m.</strong> {{ user.phone }} &nbsp;<span style="color:#666;">|</span>&nbsp; <strong style="color:#9E0085;">e.</strong> <a href="mailto:{{ user.email }}" style="color:#666;text-decoration:none;">{{ user.email }}</a></td></tr>
+<tr><td style="font-size:11px;line-height:15px;color:#666;padding:0;"><strong style="color:#B4006E;">m.</strong> {{ user.phone }} &nbsp;<span style="color:#666;">|</span>&nbsp; <strong style="color:#B4006E;">e.</strong> <a href="mailto:{{ user.email }}" style="color:#666;text-decoration:none;">{{ user.email }}</a></td></tr>
 
 <!-- Address -->
 <tr><td style="font-size:11px;line-height:15px;color:#666;padding:0;">3141 Locust Street, Ste 100, St. Louis, MO 63103</td></tr>
@@ -54,7 +54,7 @@
 <!-- Calendly (optional) -->
 {{#if user.calendly_url}}
 <tr><td style="height:15px;font-size:0;line-height:0;">&nbsp;</td></tr>
-<tr><td style="font-size:11px;line-height:15px;padding:0;"><a href="{{ user.calendly_url }}" style="color:#9E0085;text-decoration:none;font-weight:bold;">Schedule a meeting.</a></td></tr>
+<tr><td style="font-size:11px;line-height:15px;padding:0;"><a href="{{ user.calendly_url }}" style="color:#B4006E;text-decoration:none;font-weight:bold;">Schedule a meeting.</a></td></tr>
 {{/if}}
 
 <tr><td style="height:15px;font-size:0;line-height:0;">&nbsp;</td></tr>
